@@ -4,6 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'android'
+            keyPassword 'android'
+            storeFile file('releaseKey.jks')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion sdk_compile_version
     defaultConfig {
         applicationId "io.github.achmadhafid.ten_minutes_steadfast"
@@ -22,6 +30,7 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     dexOptions {
@@ -48,36 +57,35 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     //region Kotlin Stdlib
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     //endregion
-    //region Core
 
+    //region Core
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "com.google.dagger:dagger:$dagger_version"
 
     //endregion
-    //region Extras
 
+    //region Extras
     implementation "com.hannesdorfmann.fragmentargs:annotation:$fragment_args"
     implementation "com.github.AchmadHafid:desertplaceholder:$desert_view_version"
 
     //endregion
-    //region Testing
 
+    //region Testing
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "com.android.support.test:runner:$runner_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_core_version"
 
     //endregion
-    //region Annotation Processing
 
+    //region Annotation Processing
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.hannesdorfmann.fragmentargs:processor:$fragment_args"
 
