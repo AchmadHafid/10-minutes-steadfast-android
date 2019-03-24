@@ -1,0 +1,85 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion sdk_compile_version
+    defaultConfig {
+        applicationId "io.github.achmadhafid.ten_minutes_steadfast"
+        minSdkVersion sdk_min_version
+        targetSdkVersion sdk_target_version
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            shrinkResources false
+            minifyEnabled false
+        }
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    compileOptions {
+        sourceCompatibility java_compatibility_version
+        targetCompatibility java_compatibility_version
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    lintOptions {
+        warningsAsErrors true
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = jvm_target_version
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //region Kotlin Stdlib
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    //endregion
+    //region Core
+
+    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation "androidx.appcompat:appcompat:$app_compat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
+
+    //endregion
+    //region Extras
+
+    implementation "com.hannesdorfmann.fragmentargs:annotation:$fragment_args"
+    implementation "com.github.AchmadHafid:desertplaceholder:$desert_view_version"
+
+    //endregion
+    //region Testing
+
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "com.android.support.test:runner:$runner_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_core_version"
+
+    //endregion
+    //region Annotation Processing
+
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.hannesdorfmann.fragmentargs:processor:$fragment_args"
+
+    //endregion
+}

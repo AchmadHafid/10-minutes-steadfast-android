@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="quote">\"Apakah kamu mengira bahwa kamu akan masuk surga, padahal belum nyata bagi Allah orang-orang yang berjihad di antara kamu, dan belum nyata pula orang-orang yang sabar?\"</string>
+    <string name="quote_source">QS : 3 &amp;#8211 142</string>
+    <string name="welcome_message">Hindari fitnah dengan mengunci HP kamu selama 10 menit</string>
+    <string name="welcome_message_disclaimer">(Panggilan telepon masuk tetap dapat kamu terima)</string>
+    <string name="device_admin_description">Diperlukan untuk mengunci layar</string>
+    <string name="notification_channel_description">Notifikasi aplikasi</string>
+    <string name="locker_notification_title">Pengunci layar aktif</string>
+    <string name="locker_notification_content">Semoga Istiqomah</string>
+    <string name="require_admin_permission_dialog_title">Izin Dibutuhkan</string>
+    <string name="require_admin_permission_dialog_content">Akses admin diperlukan untuk mengunci layar, mohon berikan izin pada layar berikut.</string>
+    <string name="require_admin_permission_complete_dialog_title">Izin Diperoleh</string>
+    <string name="require_admin_permission_complete_dialog_content">Bismillah, Kamu ingin menguci HP kamu sekarang juga?</string>
+    <string name="run_later_dialog_title">Pengaturan Selesai</string>
+    <string name="run_later_dialog_content">HP mu akan otomatis dikunci ketika kamu menjalankan aplikasi ini berikutnya, semoga Allah memudahkan kita untuk istiqomah. Aamiin.</string>
+    <string name="start_now">Mulai Sekarang</string>
+    <string name="later">Nanti Saja</string>
+
+</resources>

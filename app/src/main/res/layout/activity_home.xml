@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jetradar.desertplaceholder.DesertPlaceholder xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:dp_buttonText="@string/start_now"
+    app:dp_message="@string/welcome_message"
+    tools:context=".ui.activity.HomeActivity">
+
+</com.jetradar.desertplaceholder.DesertPlaceholder>

@@ -1,0 +1,24 @@
+<resources>
+
+    <string name="app_name" translatable="false">Istiqomah 10 Menit</string>
+    <string name="notification_channel_id" translatable="false">@string/app_name</string>
+    <string name="notification_channel_name" translatable="false">@string/app_name</string>
+
+    <string name="quote">\"Or do you think that you will enter Paradise while Allah has not yet made evident those of you who fight in His cause and made evident those who are steadfast?\"</string>
+    <string name="quote_source">The Noble Quran 3 : 142</string>
+    <string name="welcome_message">Avoid fitnah by locking your device for 10 minutes</string>
+    <string name="welcome_message_disclaimer">(Incoming phone call can still be received)</string>
+    <string name="device_admin_description">Required for locking the device</string>
+    <string name="notification_channel_description">Application Notification</string>
+    <string name="locker_notification_title">Locker Active</string>
+    <string name="locker_notification_content">May Allah grant us all steadfastness</string>
+    <string name="require_admin_permission_dialog_title">Permission Required</string>
+    <string name="require_admin_permission_dialog_content">Please enable device admin setting on the next screen in order to allow the application to lock your device</string>
+    <string name="require_admin_permission_complete_dialog_title">Permission Complete</string>
+    <string name="require_admin_permission_complete_dialog_content">Should we lock your device now?</string>
+    <string name="run_later_dialog_title">Setup Complete</string>
+    <string name="run_later_dialog_content">Your device will automatically be locked when you open the application next time. May Allah grant us all steadfastness. Ameen.</string>
+    <string name="start_now">Start Now</string>
+    <string name="later">Later</string>
+
+</resources>
