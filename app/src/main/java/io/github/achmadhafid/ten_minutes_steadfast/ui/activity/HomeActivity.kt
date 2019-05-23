@@ -3,8 +3,8 @@ package io.github.achmadhafid.ten_minutes_steadfast.ui.activity
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.jetradar.desertplaceholder.desertPlaceHolderAction
 import io.github.achmadhafid.ten_minutes_steadfast.R
 import io.github.achmadhafid.ten_minutes_steadfast.di.inject
 import io.github.achmadhafid.ten_minutes_steadfast.receiver.DeviceAdminBroadcastReceiver
@@ -12,14 +12,13 @@ import io.github.achmadhafid.ten_minutes_steadfast.service.LockerService
 import io.github.achmadhafid.ten_minutes_steadfast.ui.fragment.ConfirmDialogFragment
 import io.github.achmadhafid.ten_minutes_steadfast.ui.fragment.ConfirmDialogFragmentBuilder
 import io.github.achmadhafid.ten_minutes_steadfast.util.ContextUtil
-import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
 private const val REQUEST_PERMISSION_DIALOG  = "request_permission_dialog"
 private const val PERMISSION_COMPLETE_DIALOG = "permission_complete_dialog"
 private const val RUN_LATER_DIALOG           = "run_later_dialog"
 
-class HomeActivity : AppCompatActivity(), ConfirmDialogFragment.Listener {
+class HomeActivity : AppCompatActivity(R.layout.activity_home), ConfirmDialogFragment.Listener {
 
     //region Properties
 
@@ -56,15 +55,9 @@ class HomeActivity : AppCompatActivity(), ConfirmDialogFragment.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-
         inject()
-
-        homeView.apply {
-            visibility = if (isAdminActive()) View.GONE else View.VISIBLE
-            setOnButtonClickListener(View.OnClickListener {
-                requestPermissionDialog.show(supportFragmentManager, null)
-            })
+        desertPlaceHolderAction(R.id.homeView) {
+            requestPermissionDialog.show(supportFragmentManager, null)
         }
     }
 
