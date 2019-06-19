@@ -18,5 +18,7 @@
     <string name="run_later_dialog_content">HP mu akan otomatis dikunci ketika kamu menjalankan aplikasi ini berikutnya, semoga Allah memudahkan kita untuk istiqomah. Aamiin.</string>
     <string name="start_now">Mulai Sekarang</string>
     <string name="later">Nanti Saja</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
 
 </resources>

@@ -20,5 +20,7 @@
     <string name="run_later_dialog_content">Your device will automatically be locked when you open the application next time. May Allah grant us all steadfastness. Ameen.</string>
     <string name="start_now">Start Now</string>
     <string name="later">Later</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

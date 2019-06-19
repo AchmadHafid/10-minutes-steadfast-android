@@ -8,7 +8,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import io.github.achmadhafid.ten_minutes_steadfast.ui.activity.HomeActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

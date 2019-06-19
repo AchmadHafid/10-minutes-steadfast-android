@@ -7,6 +7,6 @@
     android:layout_height="match_parent"
     app:dp_buttonText="@string/start_now"
     app:dp_message="@string/welcome_message"
-    tools:context=".ui.activity.HomeActivity">
+    tools:context=".HomeActivity">
 
 </com.jetradar.desertplaceholder.DesertPlaceholder>
