@@ -1,7 +1,7 @@
 10 Minutes Steadfast
 --------
 
-**Assalamu'alaikum my brothers & sisters in Islam**
+**Assalamu'alaikum brothers and sisters, peace be upon you!**
 
 How many times do you feel your smart phone has become like drugs to you?<br />
 When you keep watching YouTube until midnight so you can not wake up at fajr on time?<br />
