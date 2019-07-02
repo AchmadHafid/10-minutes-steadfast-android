@@ -1,26 +1,28 @@
 package io.github.achmadhafid.ten_minutes_steadfast
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
-import android.os.IBinder
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import io.github.achmadhafid.zpack.ktx.*
+import io.github.achmadhafid.zpack.util.LifecycleHandler
 
 private const val PARAM_KEY_START_TIME    = "startTime"
 private const val PARAM_KEY_SCAN_INTERVAL = "scanInterval"
 private const val PARAM_KEY_LOCK_DURATION = "lockDuration"
 
-class LockerService : Service() {
+class LockerService : LifecycleService() {
 
-    private val handler: Handler = Handler()
+    private val handler by LifecycleHandler(lifecycle)
 
     //region Resource Binding
 
@@ -42,9 +44,9 @@ class LockerService : Service() {
         telephonyManager.listen(PhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         //region check required conditions
 
         if (isForegroundServiceRunning(LockerService::class.java.name)) {
@@ -59,15 +61,14 @@ class LockerService : Service() {
         //endregion
         //region extract params
 
-        val extras = intent?.extras
-
-        val startTime = extras?.getLong(PARAM_KEY_START_TIME, System.currentTimeMillis()) ?: 0L
-        val interval  = extras?.getLong(PARAM_KEY_SCAN_INTERVAL, scanInterval) ?: 0L
-        val duration  = extras?.getLong(PARAM_KEY_LOCK_DURATION, lockDuration) ?: 0L
+        val startTime = intent.extras?.getLong(PARAM_KEY_START_TIME, System.currentTimeMillis()) ?: 0L
+        val interval  = intent.extras?.getLong(PARAM_KEY_SCAN_INTERVAL, scanInterval) ?: 0L
+        val duration  = intent.extras?.getLong(PARAM_KEY_LOCK_DURATION, lockDuration) ?: 0L
 
         //endregion
         //region create notification channel (required for API 26+)
 
+        @TargetApi(Build.VERSION_CODES.O)
         if (atLeastOreo()) {
             NotificationChannel(
                 notificationChannelId,
@@ -104,7 +105,6 @@ class LockerService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null)
         telephonyManager.listen(PhoneListener, PhoneStateListener.LISTEN_NONE)
     }
 

@@ -3,5 +3,4 @@
     <integer name="notification_id">111</integer>
     <integer name="lock_duration">600000</integer>
     <integer name="scan_interval">500</integer>
-    <integer name="short_delay">250</integer>
 </resources>

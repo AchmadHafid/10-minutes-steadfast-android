@@ -5,11 +5,7 @@ import android.app.admin.DeviceAdminReceiver
 class DeviceAdminBroadcastReceiver : DeviceAdminReceiver()
 
 val HomeActivity.isAdminActive
-    get() = isAdminActive(
-        DeviceAdminBroadcastReceiver::class.java
-    )
+    get() = isAdminActive<DeviceAdminBroadcastReceiver>()
 
 val LockerService.isAdminActive
-    get() = isAdminActive(
-        DeviceAdminBroadcastReceiver::class.java
-    )
+    get() = isAdminActive<DeviceAdminBroadcastReceiver>()
