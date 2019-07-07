@@ -44,14 +44,11 @@ class HomeActivity : AppCompatActivity(R.layout.activity_home) {
 //region Dialog Helper
 
 fun HomeActivity.showRequestPermissionDialog() {
-    lottieDialog {
-        type = LottieDialog.Type.BOTTOM_SHEET
+    lottieDialog(baseDialog) {
         animation(R.raw.dialog_illustration)
         title(R.string.require_admin_permission_dialog_title)
         content(R.string.require_admin_permission_dialog_content)
         positiveButton {
-            textRes = android.R.string.ok
-            iconRes = R.drawable.ic_check_black_18dp
             onClick {
                 isOpeningAdminSetting = true
                 openAdminSettings()
@@ -61,53 +58,53 @@ fun HomeActivity.showRequestPermissionDialog() {
             textRes = android.R.string.cancel
             iconRes = R.drawable.ic_close_black_18dp
         }
-        cancel {
-            onBackPressed  = true
-            onTouchOutside = false
-        }
     }
 }
 
 fun HomeActivity.showPermissionCompleteDialog() {
-    lottieDialog {
-        type = LottieDialog.Type.BOTTOM_SHEET
+    lottieDialog(baseDialog) {
         title(R.string.require_admin_permission_complete_dialog_title)
         content(R.string.require_admin_permission_complete_dialog_content)
         positiveButton {
             textRes = R.string.yes
-            iconRes = R.drawable.ic_check_black_18dp
             onClick {
                 startLockerService()
                 finish()
             }
         }
         negativeButton {
-            textRes = R.string.later
-            iconRes = R.drawable.ic_close_black_18dp
+            textRes     = R.string.later
+            iconRes     = R.drawable.ic_close_black_18dp
+            actionDelay = 200
             onClick { showRunLaterDialog() }
         }
         cancel {
             onBackPressed  = false
-            onTouchOutside = false
         }
     }
 }
 
 fun HomeActivity.showRunLaterDialog() {
-    lottieDialog {
-        type = LottieDialog.Type.BOTTOM_SHEET
+    lottieDialog(baseDialog) {
         title(R.string.run_later_dialog_title)
         content(R.string.run_later_dialog_content)
+        onDismiss {
+            finish()
+        }
+    }
+}
+
+private val baseDialog by lazy {
+    lottieDialogBuilder {
+        type = LottieDialog.Type.BOTTOM_SHEET
         positiveButton {
-            textRes = android.R.string.ok
-            iconRes = R.drawable.ic_check_black_18dp
+            textRes     = android.R.string.ok
+            iconRes     = R.drawable.ic_check_black_18dp
+            actionDelay = 200L
         }
         cancel {
             onBackPressed  = true
             onTouchOutside = false
-        }
-        onDismiss {
-            finish()
         }
     }
 }

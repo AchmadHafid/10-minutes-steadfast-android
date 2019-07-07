@@ -44,12 +44,12 @@ class LockerService : LifecycleService() {
         telephonyManager.listen(PhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
         //region check required conditions
 
-        if (isForegroundServiceRunning(LockerService::class.java.name)) {
+        if (isForegroundServiceRunning<LockerService>()) {
             return START_STICKY
         }
 
@@ -61,9 +61,9 @@ class LockerService : LifecycleService() {
         //endregion
         //region extract params
 
-        val startTime = intent.extras?.getLong(PARAM_KEY_START_TIME, System.currentTimeMillis()) ?: 0L
-        val interval  = intent.extras?.getLong(PARAM_KEY_SCAN_INTERVAL, scanInterval) ?: 0L
-        val duration  = intent.extras?.getLong(PARAM_KEY_LOCK_DURATION, lockDuration) ?: 0L
+        val startTime = intent?.extras?.getLong(PARAM_KEY_START_TIME, System.currentTimeMillis()) ?: 0L
+        val interval  = intent?.extras?.getLong(PARAM_KEY_SCAN_INTERVAL, scanInterval) ?: 0L
+        val duration  = intent?.extras?.getLong(PARAM_KEY_LOCK_DURATION, lockDuration) ?: 0L
 
         //endregion
         //region create notification channel (required for API 26+)
@@ -116,7 +116,7 @@ class LockerService : LifecycleService() {
             stopSelf()
         } else {
             if ((!isDeviceLocked || isScreenOn) && PhoneListener.isIdle()) {
-                lockDevice()
+                devicePolicyManager.lockNow()
             }
             handler.postDelayed({ scan(handler, startTime, interval, duration) }, interval)
         }

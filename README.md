@@ -5,7 +5,7 @@
 
 How many times do you feel your smart phone has become like drugs to you?<br />
 When you keep watching YouTube until midnight so you can not wake up at fajr on time?<br />
-When you delay to go to a mosque when adzan calling and suddently you realize it's already too late?<br />
+When you delay to go to a mosque when adzan calling and suddenly you realize it's already too late?<br />
 Or even worse, it may leads you to fall into sin.<br />
 
 Those are things that motivate me to create this app.
@@ -14,9 +14,9 @@ So when our smart phone becomes a ***fitna phone***, this little application may
 
 ![image](https://github.com/AchmadHafid/10-minutes-steadfast-android/blob/master/art/Screenshot.png)
 
-    May Allah azza wa jal make us easy to stay steadfast
-    May He the Most Mercifull forgive all of our sin
-    Ameen
+    May Allah Azza wa Jal make us easy to stay steadfast
+    May He the Most Merciful forgive all of our sin
+    Aameen
 
 [Download Here](https://github.com/AchmadHafid/10-minutes-steadfast-android/releases/download/v2.0/app-release.v2.0.apk)
 --------
