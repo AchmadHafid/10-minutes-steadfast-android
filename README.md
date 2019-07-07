@@ -1,7 +1,7 @@
 10 Minutes Steadfast
 --------
 
-**Assalamu'alaikum my brothers & sisters in Islam**
+**Assalamu'alaikum brothers and sisters, peace be upon you!**
 
 How many times do you feel your smart phone has become like drugs to you?<br />
 When you keep watching YouTube until midnight so you can not wake up at fajr on time?<br />
@@ -18,14 +18,17 @@ So when our smart phone becomes a ***fitna phone***, this little application may
     May He the Most Merciful forgive all of our sin
     Aameen
 
-[Download Here](https://github.com/AchmadHafid/10-minutes-steadfast-android/releases/download/v2.0/app-release.v2.0.apk)
+[Download Here](https://github.com/AchmadHafid/10-minutes-steadfast-android/releases/download/v2.1.0/10-minutes-steadfast.v2.1.0.apk)
 --------
 
 **NOTES:** <br />
 PlayProtect may prompt a warning message when you installing this application.
 This is a false alarm, you can safely continue the installation process.
 I am not publish it to Playstore because they will not allow the use of Device Admin API which is required in this app.
-Anyway, you can always build the APK yourself :)
+Anyway, you can always build the APK yourself :)<br /><br />
+
+**That's it! May this app ease your day to be a muslim**
+<br /><br />
 
 License
 -------
