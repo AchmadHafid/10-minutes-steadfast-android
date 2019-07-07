@@ -18,7 +18,7 @@ So when our smart phone becomes a ***fitna phone***, this little application may
     May He the Most Merciful forgive all of our sin
     Aameen
 
-[Download Here](https://github.com/AchmadHafid/10-minutes-steadfast-android/releases/download/v2.1.0/10-minutes-steadfast.v2.1.0.apk)
+[Download Here](https://github.com/AchmadHafid/10-minutes-steadfast-android/releases/download/v2.2.0/10-minutes-steadfast.v2.2.0.apk)
 --------
 
 **NOTES:** <br />
