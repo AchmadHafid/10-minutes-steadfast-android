@@ -7,22 +7,21 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Handler
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import io.github.achmadhafid.zpack.ktx.*
-import io.github.achmadhafid.zpack.util.LifecycleHandler
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val PARAM_KEY_START_TIME    = "startTime"
 private const val PARAM_KEY_SCAN_INTERVAL = "scanInterval"
 private const val PARAM_KEY_LOCK_DURATION = "lockDuration"
 
 class LockerService : LifecycleService() {
-
-    private val handler by LifecycleHandler(lifecycle)
 
     //region Resource Binding
 
@@ -49,8 +48,10 @@ class LockerService : LifecycleService() {
 
         //region check required conditions
 
-        if (isForegroundServiceRunning<LockerService>()) {
+        if (isForeground) {
             return START_STICKY
+        } else {
+            isForeground = true
         }
 
         if (!isAdminActive) {
@@ -96,7 +97,18 @@ class LockerService : LifecycleService() {
         //endregion
         //region start scanner
 
-        scan(handler, startTime, interval, duration)
+        lifecycleScope.launch {
+            while(true) {
+                if (System.currentTimeMillis() - startTime > duration) {
+                    stopSelf()
+                } else {
+                    if ((!isDeviceLocked || isScreenOn) && PhoneListener.isIdle()) {
+                        devicePolicyManager.lockNow()
+                    }
+                }
+                delay(interval)
+            }
+        }
 
         //endregion
 
@@ -105,21 +117,8 @@ class LockerService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        isForeground = false
         telephonyManager.listen(PhoneListener, PhoneStateListener.LISTEN_NONE)
-    }
-
-    //endregion
-    //region Private Helper
-
-    private fun scan(handler: Handler, startTime: Long, interval: Long, duration: Long) {
-        if (System.currentTimeMillis() - startTime > duration) {
-            stopSelf()
-        } else {
-            if ((!isDeviceLocked || isScreenOn) && PhoneListener.isIdle()) {
-                devicePolicyManager.lockNow()
-            }
-            handler.postDelayed({ scan(handler, startTime, interval, duration) }, interval)
-        }
     }
 
     //endregion
@@ -134,6 +133,9 @@ class LockerService : LifecycleService() {
     }
 
     companion object {
+        var isForeground = false
+            private set
+
         fun run(context: Context, startTime: Long, scanInterval: Long, lockDuration: Long) {
             ActivityCompat.startForegroundService(context, Intent(context, LockerService::class.java).apply {
                 putExtra(PARAM_KEY_START_TIME, startTime)

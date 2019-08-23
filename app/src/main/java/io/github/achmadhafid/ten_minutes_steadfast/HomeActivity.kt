@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jetradar.desertplaceholder.desertPlaceHolderAction
 import io.github.achmadhafid.lottie_dialog.*
+import io.github.achmadhafid.lottie_dialog.model.LottieDialogType
+import io.github.achmadhafid.lottie_dialog.model.onClick
 import io.github.achmadhafid.zpack.ktx.openAdminSettings
 
 class HomeActivity : AppCompatActivity(R.layout.activity_home) {
@@ -44,17 +46,17 @@ class HomeActivity : AppCompatActivity(R.layout.activity_home) {
 //region Dialog Helper
 
 fun HomeActivity.showRequestPermissionDialog() {
-    lottieDialog(baseDialog) {
-        animation(R.raw.dialog_illustration)
-        title(R.string.require_admin_permission_dialog_title)
-        content(R.string.require_admin_permission_dialog_content)
-        positiveButton {
+    lottieConfirmationDialog(baseDialog) {
+        withAnimation(R.raw.dialog_illustration)
+        withTitle(R.string.require_admin_permission_dialog_title)
+        withContent(R.string.require_admin_permission_dialog_content)
+        withPositiveButton {
             onClick {
                 isOpeningAdminSetting = true
                 openAdminSettings()
             }
         }
-        negativeButton {
+        withNegativeButton {
             textRes = android.R.string.cancel
             iconRes = R.drawable.ic_close_black_18dp
         }
@@ -62,32 +64,32 @@ fun HomeActivity.showRequestPermissionDialog() {
 }
 
 fun HomeActivity.showPermissionCompleteDialog() {
-    lottieDialog(baseDialog) {
-        title(R.string.require_admin_permission_complete_dialog_title)
-        content(R.string.require_admin_permission_complete_dialog_content)
-        positiveButton {
+    lottieConfirmationDialog(baseDialog) {
+        withTitle(R.string.require_admin_permission_complete_dialog_title)
+        withContent(R.string.require_admin_permission_complete_dialog_content)
+        withPositiveButton {
             textRes = R.string.yes
             onClick {
                 startLockerService()
                 finish()
             }
         }
-        negativeButton {
+        withNegativeButton {
             textRes     = R.string.later
             iconRes     = R.drawable.ic_close_black_18dp
             actionDelay = 200
             onClick { showRunLaterDialog() }
         }
-        cancel {
+        withCancelOption {
             onBackPressed  = false
         }
     }
 }
 
 fun HomeActivity.showRunLaterDialog() {
-    lottieDialog(baseDialog) {
-        title(R.string.run_later_dialog_title)
-        content(R.string.run_later_dialog_content)
+    lottieConfirmationDialog(baseDialog) {
+        withTitle(R.string.run_later_dialog_title)
+        withContent(R.string.run_later_dialog_content)
         onDismiss {
             finish()
         }
@@ -95,14 +97,14 @@ fun HomeActivity.showRunLaterDialog() {
 }
 
 private val baseDialog by lazy {
-    lottieDialogBuilder {
-        type = LottieDialog.Type.BOTTOM_SHEET
-        positiveButton {
+    lottieConfirmationDialogBuilder {
+        type = LottieDialogType.BOTTOM_SHEET
+        withPositiveButton {
             textRes     = android.R.string.ok
             iconRes     = R.drawable.ic_check_black_18dp
             actionDelay = 200L
         }
-        cancel {
+        withCancelOption {
             onBackPressed  = true
             onTouchOutside = false
         }
