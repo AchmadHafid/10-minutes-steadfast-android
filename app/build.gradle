@@ -17,8 +17,8 @@ android {
         applicationId "io.github.achmadhafid.ten_minutes_steadfast"
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
-        versionCode 5
-        versionName "2.3.0"
+        versionCode 6
+        versionName "2.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
