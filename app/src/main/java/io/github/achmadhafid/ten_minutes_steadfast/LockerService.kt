@@ -4,38 +4,56 @@ import android.Manifest
 import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.telephony.PhoneStateListener
-import android.telephony.TelephonyManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
-import io.github.achmadhafid.zpack.ktx.*
+import io.github.achmadhafid.zpack.extension.atLeastOreo
+import io.github.achmadhafid.zpack.extension.atLeastPie
+import io.github.achmadhafid.zpack.extension.devicePolicyManager
+import io.github.achmadhafid.zpack.extension.intRes
+import io.github.achmadhafid.zpack.extension.intent
+import io.github.achmadhafid.zpack.extension.isDeviceLocked
+import io.github.achmadhafid.zpack.extension.isScreenOn
+import io.github.achmadhafid.zpack.extension.notificationManagerCompat
+import io.github.achmadhafid.zpack.extension.stringRes
+import io.github.achmadhafid.zpack.extension.telephonyManager
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-
-private const val PARAM_KEY_START_TIME    = "startTime"
-private const val PARAM_KEY_SCAN_INTERVAL = "scanInterval"
-private const val PARAM_KEY_LOCK_DURATION = "lockDuration"
 
 class LockerService : LifecycleService() {
 
     //region Resource Binding
 
-    private val notificationId by lazy { resources.getInteger(R.integer.notification_id) }
-    private val notificationChannelId by lazy { getString(R.string.notification_channel_id) }
-    private val notificationChannelName by lazy { getString(R.string.notification_channel_name) }
-    private val notificationChannelDesc by lazy { getString(R.string.notification_channel_description) }
-    private val notificationTitle by lazy { getString(R.string.locker_notification_title) }
-    private val notificationContent by lazy { getString(R.string.locker_notification_content) }
-    private val scanInterval by lazy { resources.getInteger(R.integer.scan_interval).toLong() }
-    private val lockDuration by lazy { resources.getInteger(R.integer.lock_duration).toLong() }
+    private val notificationId by intRes(R.integer.notification_id)
+    private val notificationChannelId by stringRes(R.string.notification_channel_id)
+    private val notificationChannelName by stringRes(R.string.notification_channel_name)
+    private val notificationChannelDesc by stringRes(R.string.notification_channel_description)
+    private val notificationTitle by stringRes(R.string.locker_notification_title)
+    private val notificationContent by stringRes(R.string.locker_notification_content)
+    private val scanInterval by intRes(R.integer.scan_interval)
+    private val lockDuration by intRes(R.integer.lock_duration)
 
     //endregion
+    //region Coroutine Scope
 
+    private val scope by lazy {
+        MainScope()
+    }
+
+    //endregion
+    //region Flag
+
+    private var isForeground = false
+
+    //endregion
     //region Lifecycle Callback
 
     override fun onCreate() {
@@ -48,11 +66,8 @@ class LockerService : LifecycleService() {
 
         //region check required conditions
 
-        if (isForeground) {
-            return START_STICKY
-        } else {
-            isForeground = true
-        }
+        if (isForeground) return START_STICKY
+        else isForeground = true
 
         if (!isAdminActive) {
             stopSelf()
@@ -62,9 +77,13 @@ class LockerService : LifecycleService() {
         //endregion
         //region extract params
 
-        val startTime = intent?.extras?.getLong(PARAM_KEY_START_TIME, System.currentTimeMillis()) ?: 0L
-        val interval  = intent?.extras?.getLong(PARAM_KEY_SCAN_INTERVAL, scanInterval) ?: 0L
-        val duration  = intent?.extras?.getLong(PARAM_KEY_LOCK_DURATION, lockDuration) ?: 0L
+        val (startTime, interval, duration) = intent?.extras?.run {
+            Triple(
+                getLong(PARAM_KEY_START_TIME, System.currentTimeMillis()),
+                getLong(PARAM_KEY_SCAN_INTERVAL, scanInterval.toLong()),
+                getLong(PARAM_KEY_LOCK_DURATION, lockDuration.toLong())
+            )
+        } ?: Triple(0L, 0L, 0L)
 
         //endregion
         //region create notification channel (required for API 26+)
@@ -76,9 +95,8 @@ class LockerService : LifecycleService() {
                 notificationChannelName,
                 NotificationManager.IMPORTANCE_HIGH
             ).let {
-                notificationManager
-                    .createNotificationChannel(it.apply {
-                        importance = NotificationManager.IMPORTANCE_HIGH
+                notificationManagerCompat.createNotificationChannel(it.apply {
+                        importance = NotificationManagerCompat.IMPORTANCE_HIGH
                         description = notificationChannelDesc
                     })
             }
@@ -90,15 +108,17 @@ class LockerService : LifecycleService() {
         startForeground(notificationId, NotificationCompat.Builder(this, notificationChannelId)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationContent)
-                .setSmallIcon(R.drawable.ic_lock_black_24dp)
+                .setSmallIcon(R.drawable.ic_lock_24dp)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build())
 
         //endregion
         //region start scanner
 
-        lifecycleScope.launch {
+        scope.launch {
             while(true) {
+                if (!isActive) return@launch
+
                 if (System.currentTimeMillis() - startTime > duration) {
                     stopSelf()
                 } else {
@@ -117,51 +137,36 @@ class LockerService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        scope.cancel()
         isForeground = false
         telephonyManager.listen(PhoneListener, PhoneStateListener.LISTEN_NONE)
-    }
-
-    //endregion
-    //region Object Helper
-
-    object PhoneListener : PhoneStateListener() {
-        private var state: Int = TelephonyManager.CALL_STATE_IDLE
-        override fun onCallStateChanged(state: Int, phoneNumber: String?) {
-            PhoneListener.state = state
-        }
-        fun isIdle() = state == TelephonyManager.CALL_STATE_IDLE
-    }
-
-    companion object {
-        var isForeground = false
-            private set
-
-        fun run(context: Context, startTime: Long, scanInterval: Long, lockDuration: Long) {
-            ActivityCompat.startForegroundService(context, Intent(context, LockerService::class.java).apply {
-                putExtra(PARAM_KEY_START_TIME, startTime)
-                putExtra(PARAM_KEY_SCAN_INTERVAL, scanInterval)
-                putExtra(PARAM_KEY_LOCK_DURATION, lockDuration)
-            })
-        }
     }
 
     //endregion
 
 }
 
+//region Parameter Key
+
+private const val PARAM_KEY_START_TIME    = "startTime"
+private const val PARAM_KEY_SCAN_INTERVAL = "scanInterval"
+private const val PARAM_KEY_LOCK_DURATION = "lockDuration"
+
+//endregion
 //region Extension Helper
 
-fun HomeActivity.startLockerService() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        requestPermissions(arrayOf(Manifest.permission.FOREGROUND_SERVICE), 1234)
-    }
-    LockerService.run(
-        context = this,
-        startTime = System.currentTimeMillis(),
-        scanInterval = resources.getInteger(R.integer.scan_interval).toLong(),
-        lockDuration = resources.getInteger(R.integer.lock_duration).toLong()
-    )
-    finish()
+fun AppCompatActivity.startLockerService(
+    scanInterval: Long,
+    lockDuration: Long,
+    startTime: Long = System.currentTimeMillis()
+) {
+    @TargetApi(Build.VERSION_CODES.P)
+    if (atLeastPie()) requestPermissions(arrayOf(Manifest.permission.FOREGROUND_SERVICE), 1234)
+    ActivityCompat.startForegroundService(this, intent<LockerService> {
+        putExtra(PARAM_KEY_START_TIME, startTime)
+        putExtra(PARAM_KEY_SCAN_INTERVAL, scanInterval)
+        putExtra(PARAM_KEY_LOCK_DURATION, lockDuration)
+    })
 }
 
 //endregion

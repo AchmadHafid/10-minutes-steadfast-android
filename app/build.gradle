@@ -17,8 +17,8 @@ android {
         applicationId "io.github.achmadhafid.ten_minutes_steadfast"
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
-        versionCode 6
-        versionName "2.4.0"
+        versionCode 7
+        versionName "2.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -79,11 +79,10 @@ dependencies {
 
     implementation "androidx.core:core-ktx:$androidx_core_ktx_version"
     implementation "androidx.appcompat:appcompat:$androidx_appcompat_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$androidx_lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidx_lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$androidx_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-service:$androidx_lifecycle_version"
 
     implementation "com.github.AchmadHafid:Zpack:$zpack_version"
     implementation "com.github.AchmadHafid:desertplaceholder:$desert_view_version"

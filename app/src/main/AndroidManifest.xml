@@ -28,7 +28,8 @@
         <service
             android:name=".LockerService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="phoneCall"/>
 
         <receiver
             android:name=".DeviceAdminBroadcastReceiver"
